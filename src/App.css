@@ -162,7 +162,14 @@
   margin-bottom: 20px;
 }
 
-.panel-heading > span {
+.panel-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.panel-actions > span {
   flex: 0 0 auto;
   padding: 5px 10px;
   border-radius: 999px;
@@ -170,6 +177,26 @@
   background: var(--surface);
   font-size: 13px;
   font-weight: 700;
+}
+
+.panel-actions button {
+  min-height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0 10px;
+  color: var(--text-strong);
+  background: var(--panel);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.panel-actions button:hover {
+  background: var(--surface);
+}
+
+.panel-actions button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
 }
 
 .channel-list,
@@ -308,8 +335,14 @@
 
   .metric-grid,
   .channel-row,
-  .panel-heading {
+  .panel-heading,
+  .panel-actions {
     grid-template-columns: 1fr;
+  }
+
+  .panel-actions {
+    display: grid;
+    width: 100%;
   }
 
   .channel-row {
