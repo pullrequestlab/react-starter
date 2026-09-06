@@ -172,6 +172,31 @@
   font-weight: 700;
 }
 
+.activity-toggle {
+  flex: 0 0 auto;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+  background: var(--surface);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.activity-toggle:hover,
+.activity-toggle.active {
+  color: var(--text-strong);
+  background: var(--control-active);
+}
+
+.activity-toggle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
 .channel-list,
 .activity-list {
   display: grid;
@@ -241,6 +266,13 @@
   color: var(--muted);
   font-size: 13px;
   font-weight: 700;
+}
+
+.empty-state {
+  padding: 14px 0;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-weight: 650;
 }
 
 .impact {
