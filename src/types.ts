@@ -2,6 +2,8 @@ export type DateRange = '7d' | '30d' | '90d'
 
 export type CustomerSegment = 'all' | 'startup' | 'growth' | 'enterprise'
 
+export type Region = 'all' | 'na' | 'emea' | 'apac'
+
 export type Metric = {
   id: string
   label: string
@@ -14,6 +16,7 @@ export type SalesChannel = {
   id: string
   name: string
   segment: Exclude<CustomerSegment, 'all'>
+  region: Exclude<Region, 'all'>
   revenue: number
   opportunities: number
   winRate: number

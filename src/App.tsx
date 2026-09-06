@@ -4,33 +4,42 @@ import { dashboardData } from './data/dashboardData'
 import {
   formatCurrency,
   formatMetricValue,
+  getChannelsForRegion,
   getChannelsForSegment,
   getDashboardForRange,
   getPipelineTotal,
   getTopMetric,
   rangeLabels,
+  regionLabels,
   segmentLabels,
 } from './lib/dashboardMetrics'
-import type { CustomerSegment, DateRange } from './types'
+import type { CustomerSegment, DateRange, Region } from './types'
 
 const ranges: DateRange[] = ['7d', '30d', '90d']
 const segments: CustomerSegment[] = ['all', 'startup', 'growth', 'enterprise']
+const regions: Region[] = ['all', 'na', 'emea', 'apac']
 
 function App() {
   const [activeRange, setActiveRange] = useState<DateRange>('30d')
   const [activeSegment, setActiveSegment] = useState<CustomerSegment>('all')
+  const [activeRegion, setActiveRegion] = useState<Region>('all')
 
   const dashboard =
     getDashboardForRange(dashboardData, activeRange) ?? dashboardData[0]
 
-  const visibleChannels = useMemo(
+  const segmentChannels = useMemo(
     () => getChannelsForSegment(dashboard.salesChannels, activeSegment),
     [activeSegment, dashboard.salesChannels],
   )
 
+  const visibleChannels = useMemo(
+    () => getChannelsForRegion(segmentChannels, activeRegion),
+    [activeRegion, segmentChannels],
+  )
+
   const pipelineTotal = useMemo(
-    () => getPipelineTotal(visibleChannels),
-    [visibleChannels],
+    () => getPipelineTotal(segmentChannels),
+    [segmentChannels],
   )
 
   const topMetric = useMemo(
@@ -74,6 +83,19 @@ function App() {
               onClick={() => setActiveSegment(segment)}
             >
               {segmentLabels[segment]}
+            </button>
+          ))}
+        </div>
+
+        <div className="filter-group" aria-label="Region">
+          {regions.map((region) => (
+            <button
+              key={region}
+              type="button"
+              className={region === activeRegion ? 'active' : ''}
+              onClick={() => setActiveRegion(region)}
+            >
+              {regionLabels[region]}
             </button>
           ))}
         </div>

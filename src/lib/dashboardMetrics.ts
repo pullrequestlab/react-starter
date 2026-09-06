@@ -3,6 +3,7 @@ import type {
   DashboardData,
   DateRange,
   Metric,
+  Region,
   SalesChannel,
 } from '../types'
 
@@ -17,6 +18,13 @@ export const segmentLabels: Record<CustomerSegment, string> = {
   startup: 'Startup',
   growth: 'Growth',
   enterprise: 'Enterprise',
+}
+
+export const regionLabels: Record<Region, string> = {
+  all: 'All regions',
+  na: 'North America',
+  emea: 'EMEA',
+  apac: 'APAC',
 }
 
 export function getDashboardForRange(
@@ -35,6 +43,14 @@ export function getChannelsForSegment(
   }
 
   return channels.filter((channel) => channel.segment === segment)
+}
+
+export function getChannelsForRegion(channels: SalesChannel[], region: Region) {
+  if (region === 'all') {
+    return channels
+  }
+
+  return channels.filter((channel) => channel.region === region)
 }
 
 export function getPipelineTotal(channels: SalesChannel[]) {
