@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 import { dashboardData } from './data/dashboardData'
 import {
@@ -17,8 +17,19 @@ const ranges: DateRange[] = ['7d', '30d', '90d']
 const segments: CustomerSegment[] = ['all', 'startup', 'growth', 'enterprise']
 
 function App() {
-  const [activeRange, setActiveRange] = useState<DateRange>('30d')
-  const [activeSegment, setActiveSegment] = useState<CustomerSegment>('all')
+  const [activeRange, setActiveRange] = useState<DateRange>(
+    () => (localStorage.getItem('dashboard.range') as DateRange) ?? '30d',
+  )
+  const [activeSegment, setActiveSegment] = useState<CustomerSegment>(
+    () =>
+      (localStorage.getItem('dashboard.customerSegment') as CustomerSegment) ??
+      'all',
+  )
+
+  useEffect(() => {
+    localStorage.setItem('dashboard.range', activeRange)
+    localStorage.setItem('dashboard.customerSegment', activeSegment)
+  }, [activeRange, activeSegment])
 
   const dashboard =
     getDashboardForRange(dashboardData, activeRange) ?? dashboardData[0]
