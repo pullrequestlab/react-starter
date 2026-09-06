@@ -19,6 +19,7 @@ const segments: CustomerSegment[] = ['all', 'startup', 'growth', 'enterprise']
 function App() {
   const [activeRange, setActiveRange] = useState<DateRange>('30d')
   const [activeSegment, setActiveSegment] = useState<CustomerSegment>('all')
+  const [showHighImpactOnly, setShowHighImpactOnly] = useState(false)
 
   const dashboard =
     getDashboardForRange(dashboardData, activeRange) ?? dashboardData[0]
@@ -36,6 +37,14 @@ function App() {
   const topMetric = useMemo(
     () => getTopMetric(dashboard.metrics),
     [dashboard.metrics],
+  )
+
+  const visibleActivity = useMemo(
+    () =>
+      showHighImpactOnly
+        ? dashboard.activity.filter((item) => item.impact === 'high')
+        : dashboard.activity,
+    [showHighImpactOnly],
   )
 
   return (
@@ -127,10 +136,17 @@ function App() {
               <p className="section-label">Activity</p>
               <h2>Latest signals</h2>
             </div>
+            <button
+              type="button"
+              className={showHighImpactOnly ? 'activity-toggle active' : 'activity-toggle'}
+              onClick={() => setShowHighImpactOnly((value) => !value)}
+            >
+              High impact
+            </button>
           </div>
 
           <div className="activity-list">
-            {dashboard.activity.map((item) => (
+            {visibleActivity.map((item) => (
               <div className="activity-item" key={item.id}>
                 <span className={`impact impact--${item.impact}`}>
                   {item.impact}
@@ -142,6 +158,9 @@ function App() {
                 </div>
               </div>
             ))}
+            {visibleActivity.length === 0 && (
+              <p className="empty-state">No high impact signals in this range.</p>
+            )}
           </div>
         </article>
       </section>
