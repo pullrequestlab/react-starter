@@ -19,6 +19,7 @@ const segments: CustomerSegment[] = ['all', 'startup', 'growth', 'enterprise']
 function App() {
   const [activeRange, setActiveRange] = useState<DateRange>('30d')
   const [activeSegment, setActiveSegment] = useState<CustomerSegment>('all')
+  const [activitySearch, setActivitySearch] = useState('')
 
   const dashboard =
     getDashboardForRange(dashboardData, activeRange) ?? dashboardData[0]
@@ -36,6 +37,22 @@ function App() {
   const topMetric = useMemo(
     () => getTopMetric(dashboard.metrics),
     [dashboard.metrics],
+  )
+
+  const visibleActivity = useMemo(
+    () =>
+      dashboard.activity
+        .sort(
+          (first, second) =>
+            new Date(second.createdAt).getTime() -
+            new Date(first.createdAt).getTime(),
+        )
+        .filter(
+          (item) =>
+            item.title.includes(activitySearch) ||
+            item.owner.includes(activitySearch),
+        ),
+    [activitySearch, dashboard.activity],
   )
 
   return (
@@ -127,10 +144,17 @@ function App() {
               <p className="section-label">Activity</p>
               <h2>Latest signals</h2>
             </div>
+            <input
+              className="activity-search"
+              type="search"
+              placeholder="Search activity"
+              value={activitySearch}
+              onChange={(event) => setActivitySearch(event.target.value)}
+            />
           </div>
 
           <div className="activity-list">
-            {dashboard.activity.map((item) => (
+            {visibleActivity.map((item) => (
               <div className="activity-item" key={item.id}>
                 <span className={`impact impact--${item.impact}`}>
                   {item.impact}

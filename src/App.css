@@ -172,6 +172,21 @@
   font-weight: 700;
 }
 
+.activity-search {
+  width: min(220px, 100%);
+  min-height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0 10px;
+  color: var(--text);
+  background: var(--panel);
+}
+
+.activity-search:focus {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
 .channel-list,
 .activity-list {
   display: grid;
