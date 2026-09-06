@@ -38,6 +38,29 @@ function App() {
     [dashboard.metrics],
   )
 
+  function handleExportCsv() {
+    const csvRows = [
+      'Channel,Segment,Revenue,Opportunities,Win rate',
+      ...visibleChannels.map((channel) =>
+        [
+          channel.name,
+          channel.segment,
+          channel.revenue,
+          channel.opportunities,
+          `${channel.winRate}%`,
+        ].join(','),
+      ),
+    ]
+
+    const csvUrl = URL.createObjectURL(
+      new Blob([csvRows.join('\n')], { type: 'text/csv' }),
+    )
+    const link = document.createElement('a')
+    link.href = csvUrl
+    link.download = `${activeRange}-${activeSegment}-pipeline.csv`
+    link.click()
+  }
+
   return (
     <main className="app-shell">
       <header className="page-header">
@@ -99,7 +122,12 @@ function App() {
               <p className="section-label">Pipeline</p>
               <h2>{formatCurrency(pipelineTotal)} forecast</h2>
             </div>
-            <span>{segmentLabels[activeSegment]}</span>
+            <div className="panel-actions">
+              <span>{segmentLabels[activeSegment]}</span>
+              <button type="button" onClick={handleExportCsv}>
+                Export CSV
+              </button>
+            </div>
           </div>
 
           <div className="channel-list">
